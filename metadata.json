@@ -1,0 +1,6 @@
+{
+  "name": "Trojan FC Admin",
+  "description": "A web application to help manage and strategize for a 7-a-side football team. Drag and drop players onto the pitch, manage your roster, and set your team's formation and captain.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

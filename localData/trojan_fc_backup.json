@@ -1,0 +1,389 @@
+{
+  "tactician": {
+    "customSetupName": "Configuración de Mi Equipo",
+    "selectedFormationName": "2-3-1",
+    "playersOnPitchIds": [
+      "0a5bd661-3126-441e-9a25-6483c16a808c",
+      "aad7bb2a-e986-4490-a164-10c846bfe9cb",
+      "1bac9d6e-7337-4464-b6ed-efcd01d90368",
+      "878ba90f-849f-4bd1-a0f6-06211b66dc7a",
+      "95d84c94-c379-4bb0-95b6-ce8f521cd6ee",
+      "be21b557-5d74-43da-bd56-d236da19297b",
+      "c62ce07b-2214-4fe4-aa40-ab10594c22ea"
+    ],
+    "captainId": "878ba90f-849f-4bd1-a0f6-06211b66dc7a",
+    "penaltyTakerId": "95d84c94-c379-4bb0-95b6-ce8f521cd6ee",
+    "cornerTakerId": "95d84c94-c379-4bb0-95b6-ce8f521cd6ee",
+    "freeKickTakerId": "0a5bd661-3126-441e-9a25-6483c16a808c"
+  },
+  "roster": [
+    {
+      "id": "878ba90f-849f-4bd1-a0f6-06211b66dc7a",
+      "name": "Manuel",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Manuel",
+      "skill": 42,
+      "age": 28,
+      "position": "Midfielder",
+      "jerseyNumber": 1,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 200,
+      "playablePositions": [
+        "Midfielder"
+      ]
+    },
+    {
+      "id": "aad7bb2a-e986-4490-a164-10c846bfe9cb",
+      "name": "Bobby",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Bobby",
+      "skill": 38,
+      "age": 32,
+      "position": "Defender",
+      "jerseyNumber": 2,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Defender"
+      ]
+    },
+    {
+      "id": "d02b45b9-9f12-4285-aeb3-f5abf73e3262",
+      "name": "Ricardo",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Ricardo",
+      "skill": 45,
+      "age": 29,
+      "position": "Defender",
+      "jerseyNumber": 3,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Defender",
+        "Midfielder"
+      ]
+    },
+    {
+      "id": "95d84c94-c379-4bb0-95b6-ce8f521cd6ee",
+      "name": "Julio",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Julio",
+      "skill": 42,
+      "age": 25,
+      "position": "Midfielder",
+      "jerseyNumber": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Midfielder"
+      ]
+    },
+    {
+      "id": "1bac9d6e-7337-4464-b6ed-efcd01d90368",
+      "name": "Octavio",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Octavio",
+      "skill": 48,
+      "age": 27,
+      "position": "Defender",
+      "jerseyNumber": 5,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Midfielder",
+        "Defender"
+      ]
+    },
+    {
+      "id": "c62ce07b-2214-4fe4-aa40-ab10594c22ea",
+      "name": "Alfonso",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Alfonso",
+      "skill": 42,
+      "age": 32,
+      "position": "Forward",
+      "jerseyNumber": 6,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 200,
+      "playablePositions": [
+        "Midfielder",
+        "Forward"
+      ]
+    },
+    {
+      "id": "0f08d02e-8c7f-4173-9550-7fb82eb4a67a",
+      "name": "Emilio",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Emilio",
+      "skill": 49,
+      "age": 24,
+      "position": "Forward",
+      "jerseyNumber": 7,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Forward"
+      ]
+    },
+    {
+      "id": "6d2c09c2-b7a9-4a8b-9254-9d24712fc56e",
+      "name": "Fercho",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Fercho",
+      "skill": 33,
+      "age": 30,
+      "position": "Forward",
+      "jerseyNumber": 8,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Forward",
+        "Midfielder"
+      ]
+    },
+    {
+      "id": "9216ff95-88b3-4a12-a5cc-ca577b7c4293",
+      "name": "Juan Carlos",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=JuanCarlos",
+      "skill": 41,
+      "age": 26,
+      "position": "Defender",
+      "jerseyNumber": 9,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Defender"
+      ]
+    },
+    {
+      "id": "0a5bd661-3126-441e-9a25-6483c16a808c",
+      "name": "Yoshi",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Yoshi",
+      "skill": 37,
+      "age": 23,
+      "position": "Goalkeeper",
+      "jerseyNumber": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Goalkeeper",
+        "Defender",
+        "Midfielder"
+      ]
+    },
+    {
+      "id": "e752d0d9-512e-4e8b-b072-9b5ca718a004",
+      "name": "Israel",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Israel",
+      "skill": 46,
+      "age": 28,
+      "position": "Forward",
+      "jerseyNumber": 11,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Forward"
+      ]
+    },
+    {
+      "id": "be21b557-5d74-43da-bd56-d236da19297b",
+      "name": "Diego Diaz",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=DiegoDiaz",
+      "skill": 39,
+      "age": 28,
+      "position": "Midfielder",
+      "jerseyNumber": 8,
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Midfielder",
+        "Forward"
+      ]
+    },
+    {
+      "id": "cd1c3636-2eff-4b73-8ff4-32ade5864312",
+      "photoUrl": "https://avatar.iran.liara.run/public/boy?username=Duran",
+      "goals": 0,
+      "assists": 0,
+      "minutesPlayed": 0,
+      "gamesPlayed": 0,
+      "playablePositions": [
+        "Defender"
+      ],
+      "name": "Duran",
+      "skill": 40,
+      "age": 40,
+      "position": "Defender",
+      "jerseyNumber": 12
+    }
+  ],
+  "season": {
+    "matches": [
+      {
+        "id": "3af1ef41-675f-47c7-b9a4-ed3f596deb63",
+        "date": "2025-05-30",
+        "opponent": "Vintage XI",
+        "time": "14:00",
+        "isHome": true,
+        "score": {
+          "us": 2,
+          "them": 1
+        }
+      },
+      {
+        "id": "37482888-bf50-4df7-88cb-892276b83f2b",
+        "date": "2025-06-07",
+        "opponent": "CASI LEYENDAS",
+        "time": "19:00",
+        "isHome": true
+      }
+    ],
+    "leagueTable": [
+      {
+        "rank": 1,
+        "teamName": "Trojan FC",
+        "played": 5,
+        "wins": 4,
+        "draws": 1,
+        "losses": 0,
+        "goalsFor": 12,
+        "goalsAgainst": 3,
+        "goalDifference": 9,
+        "points": 13
+      },
+      {
+        "rank": 2,
+        "teamName": "Spartans United",
+        "played": 5,
+        "wins": 3,
+        "draws": 1,
+        "losses": 1,
+        "goalsFor": 10,
+        "goalsAgainst": 5,
+        "goalDifference": 5,
+        "points": 10
+      },
+      {
+        "rank": 3,
+        "teamName": "Gladiators City",
+        "played": 5,
+        "wins": 2,
+        "draws": 2,
+        "losses": 1,
+        "goalsFor": 8,
+        "goalsAgainst": 7,
+        "goalDifference": 1,
+        "points": 8
+      },
+      {
+        "rank": 4,
+        "teamName": "Vikings Rovers",
+        "played": 5,
+        "wins": 1,
+        "draws": 1,
+        "losses": 3,
+        "goalsFor": 5,
+        "goalsAgainst": 10,
+        "goalDifference": -5,
+        "points": 4
+      },
+      {
+        "rank": 5,
+        "teamName": "Knights Athletic",
+        "played": 5,
+        "wins": 0,
+        "draws": 1,
+        "losses": 4,
+        "goalsFor": 2,
+        "goalsAgainst": 12,
+        "goalDifference": -10,
+        "points": 1
+      }
+    ],
+    "teamStats": [
+      {
+        "id": "gf",
+        "labelKey": "goalsFor",
+        "value": 78
+      },
+      {
+        "id": "ga",
+        "labelKey": "goalsAgainst",
+        "value": 35
+      },
+      {
+        "id": "cs",
+        "labelKey": "cleanSheets",
+        "value": 12
+      },
+      {
+        "id": "poss",
+        "labelKey": "avgPossession",
+        "value": "58%"
+      },
+      {
+        "id": "sot",
+        "labelKey": "shotsOnTarget",
+        "value": 189
+      }
+    ],
+    "playerStats": [
+      {
+        "id": "ts",
+        "playerName": "Emilio",
+        "statNameKey": "topScorer",
+        "value": 22,
+        "playerPhotoUrl": "https://avatar.iran.liara.run/public/boy?username=Emilio"
+      },
+      {
+        "id": "ma",
+        "playerName": "Octavio",
+        "statNameKey": "mostAssists",
+        "value": 15,
+        "playerPhotoUrl": "https://avatar.iran.liara.run/public/boy?username=Octavio"
+      },
+      {
+        "id": "m_app",
+        "playerName": "Manuel",
+        "statNameKey": "mostAppearances",
+        "value": 34,
+        "playerPhotoUrl": "https://avatar.iran.liara.run/public/boy?username=Manuel"
+      },
+      {
+        "id": "yc",
+        "playerName": "Ricardo",
+        "statNameKey": "yellowCards",
+        "value": 8,
+        "playerPhotoUrl": "https://avatar.iran.liara.run/public/boy?username=Ricardo"
+      },
+      {
+        "id": "rc",
+        "playerName": "Bobby",
+        "statNameKey": "redCards",
+        "value": 1,
+        "playerPhotoUrl": "https://avatar.iran.liara.run/public/boy?username=Bobby"
+      }
+    ]
+  },
+  "settings": {
+    "language": "es",
+    "cardScale": 0.7
+  },
+  "version": "1.0.0"
+}

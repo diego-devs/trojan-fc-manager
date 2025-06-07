@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trojan FC Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        overscroll-behavior: none; /* Prevents pull-to-refresh on mobile if dragging near edges */
+        background: linear-gradient(to bottom, #1E3A2A, #E5E4E2); /* Dark Green to Platinum Gray */
+        color: #374151; /* Default body text color (Tailwind gray-700) */
+        min-height: 100vh; /* Ensure gradient covers full viewport height */
+      }
+      /* Custom scrollbar for webkit browsers */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #2d3748; /* gray-800 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #4a5568; /* gray-600 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #718096; /* gray-500 */
+      }
+
+      /* Thin scrollbar for specific elements */
+      .custom-scrollbar-thin::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
+      .custom-scrollbar-thin::-webkit-scrollbar-thumb {
+        background: #718096; /* gray-500 */
+      }
+       .custom-scrollbar-thin::-webkit-scrollbar-track {
+        background: #1a202c; /* gray-900 or similar dark */
+      }
+
+
+      /* For Firefox */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: #4a5568 #2d3748;
+      }
+       .custom-scrollbar-thin {
+        scrollbar-width: thin;
+        scrollbar-color: #718096 #1a202c;
+      }
+
+      .modal-backdrop-blur {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
