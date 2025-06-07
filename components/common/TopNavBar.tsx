@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { useTranslation } from '../../hooks/useTranslation';
 
-type AppView = 'tactician' | 'players' | 'season';
+type AppView = 'tactician' | 'players' | 'season' | 'nextMatch'; // Updated AppView
 
 interface TopNavBarProps {
   currentView: AppView;
@@ -18,6 +19,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ currentView, setCurrentView, onSa
     { view: 'tactician', labelKey: 'navTactician' },
     { view: 'players', labelKey: 'navPlayers' },
     { view: 'season', labelKey: 'navSeason' },
+    { view: 'nextMatch', labelKey: 'navNextMatch' }, // Added Next Match
   ];
 
   return (

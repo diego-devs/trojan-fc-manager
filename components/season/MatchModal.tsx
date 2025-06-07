@@ -7,15 +7,16 @@ interface MatchModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (match: Match) => void;
-  matchData: Partial<Match> | null; // Can be partial for new match (date prefilled), or full match for edit
+  matchData: Partial<Match> | null; 
   mode: 'add' | 'edit';
 }
 
 const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSave, matchData, mode }) => {
   const { t } = useTranslation();
   const [opponent, setOpponent] = useState('');
-  const [time, setTime] = useState('19:00'); // Default time
+  const [time, setTime] = useState('19:00'); 
   const [isHome, setIsHome] = useState(true);
+  const [matchNotes, setMatchNotes] = useState(''); // State for match notes
   const [currentMatchId, setCurrentMatchId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -23,11 +24,13 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSave, matchD
       setOpponent(matchData.opponent || '');
       setTime(matchData.time || '19:00');
       setIsHome(matchData.isHome === undefined ? true : matchData.isHome);
+      setMatchNotes(matchData.matchNotes || ''); // Initialize matchNotes
       setCurrentMatchId(matchData.id);
-    } else if (isOpen && !matchData) { // For 'add' mode if no specific prefill for opponent/time
+    } else if (isOpen && !matchData) { 
         setOpponent('');
         setTime('19:00');
         setIsHome(true);
+        setMatchNotes(''); // Reset notes for new match
         setCurrentMatchId(undefined);
     }
   }, [isOpen, matchData]);
@@ -37,7 +40,7 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSave, matchD
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!opponent.trim()) {
-      alert(t('opponentLabel') + ' ' + t('playerNameRequiredError')); // Reusing error message
+      alert(t('opponentLabel') + ' ' + t('playerNameRequiredError')); 
       return;
     }
     if (!/^\d{2}:\d{2}$/.test(time)) {
@@ -47,10 +50,13 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSave, matchD
 
     const finalMatchData: Match = {
       id: mode === 'edit' && currentMatchId ? currentMatchId : crypto.randomUUID(),
-      date: matchData!.date!, // Date must be provided in matchData for both modes
+      date: matchData!.date!, 
       opponent: opponent.trim(),
       time,
       isHome,
+      matchNotes: matchNotes.trim(), // Include matchNotes
+      // Ensure score is preserved if editing and exists
+      ...(mode === 'edit' && matchData?.score && { score: matchData.score }),
     };
     onSave(finalMatchData);
     onClose();
@@ -65,7 +71,7 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSave, matchD
         role="dialog" aria-modal="true" aria-labelledby="matchModalTitle"
     >
       <div 
-        className="bg-slate-800 p-6 rounded-lg shadow-2xl w-full max-w-md"
+        className="bg-slate-800 p-6 rounded-lg shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar-thin"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
@@ -119,6 +125,17 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSave, matchD
                 <span className="ml-2">{t('awayMatch')}</span>
               </label>
             </div>
+          </div>
+          <div>
+            <label htmlFor="matchNotes" className="block text-sm font-medium text-gray-300">{t('matchNotesStrategy')}</label>
+            <textarea
+              id="matchNotes"
+              value={matchNotes}
+              onChange={(e) => setMatchNotes(e.target.value)}
+              rows={3}
+              className="mt-1 block w-full bg-slate-700 border-slate-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm text-white placeholder-slate-400"
+              placeholder={t('matchNotesStrategy') + "..."}
+            />
           </div>
           <div className="flex justify-end space-x-3 pt-2">
             <button

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Player, DraggedPlayerInfo, Formation, PlayerPosition, TacticalSetup, AppData, Match, Language, LeagueTableRow, TeamStatistic, PlayerStatistic } from './types';
 import { 
   PITCH_SLOT_COUNT, 
@@ -17,6 +17,7 @@ import PlayerDetailModal from './components/common/PlayerDetailModal';
 import TopNavBar from './components/common/TopNavBar';
 import PlayersManagementPage from './components/PlayersManagementPage';
 import SeasonPage from './components/SeasonPage';
+import NextMatchPage from './components/NextMatchPage';
 import { useTranslation } from './hooks/useTranslation';
 import { translations } from './i18n/translations'; 
 
@@ -54,7 +55,7 @@ const getSlotRole = (formationName: string, slotIndex: number): PlayerPosition |
   return null; 
 };
 
-type AppView = 'tactician' | 'players' | 'season';
+type AppView = 'tactician' | 'players' | 'season' | 'nextMatch';
 
 export type NewPlayerData = Omit<Player, 'id' | 'photoUrl' | 'goals' | 'assists' | 'minutesPlayed' | 'gamesPlayed' | 'playablePositions'> & Partial<Pick<Player, 'goals' | 'assists' | 'minutesPlayed' | 'gamesPlayed' | 'playablePositions'>>;
 
@@ -89,7 +90,8 @@ const App = (): JSX.Element => {
   const [draggedPlayerInfo, setDraggedPlayerInfo] = useState<DraggedPlayerInfo | null>(null);
   const [currentView, setCurrentView] = useState<AppView>('tactician');
 
-  // State for season statistics
+  // State for season data
+  const [allSeasonMatches, setAllSeasonMatches] = useState<Match[]>([]);
   const [leagueTableData, setLeagueTableData] = useState<LeagueTableRow[]>([]);
   const [teamStatsData, setTeamStatsData] = useState<TeamStatistic[]>([]);
   const [playerStatsData, setPlayerStatsData] = useState<PlayerStatistic[]>([]);
@@ -114,7 +116,7 @@ const App = (): JSX.Element => {
     const formationToLoad = FORMATIONS.find(f => f.name === dataToLoad.tactician.selectedFormationName);
     setSelectedFormation(formationToLoad || DEFAULT_FORMATION);
 
-    setAllPlayers(dataToLoad.roster || []); // Use loaded roster or empty array
+    setAllPlayers(dataToLoad.roster || []); 
 
     const currentRosterForPitch = dataToLoad.roster || [];
     const newPlayersOnPitch = dataToLoad.tactician.playersOnPitchIds.map(id => {
@@ -130,20 +132,26 @@ const App = (): JSX.Element => {
     setFreeKickTakerId(findRolePlayerInLoadedRoster(dataToLoad.tactician.freeKickTakerId));
 
     if (dataToLoad.season) {
-        if (dataToLoad.season.matches) {
-            try {
-                localStorage.setItem('soccerSeasonMatches', JSON.stringify(dataToLoad.season.matches));
-            } catch (storageError) {
-                console.error("Error saving loaded matches to localStorage from applyLoadedData:", storageError);
-            }
-        }
+        setAllSeasonMatches(dataToLoad.season.matches || []);
         setLeagueTableData(dataToLoad.season.leagueTable || []);
         setTeamStatsData(dataToLoad.season.teamStats || []);
         setPlayerStatsData(dataToLoad.season.playerStats || []);
     } else {
+        // Fallback for older data structures that might not have a season object
+        setAllSeasonMatches([]); 
         setLeagueTableData([]);
         setTeamStatsData([]);
         setPlayerStatsData([]);
+         // Attempt to load matches from old localStorage key if season object is missing in backup
+        try {
+            const legacyStoredMatches = localStorage.getItem('soccerSeasonMatches');
+            if (legacyStoredMatches) {
+                setAllSeasonMatches(JSON.parse(legacyStoredMatches));
+                console.warn("Loaded matches from legacy 'soccerSeasonMatches' localStorage key as it was missing in the backup file's season object.");
+            }
+        } catch (e) {
+            console.error("Error reading legacy matches from localStorage", e);
+        }
     }
     
     setLanguage(dataToLoad.settings.language || 'es');
@@ -154,18 +162,19 @@ const App = (): JSX.Element => {
   useEffect(() => {
     if (isInitialized) return;
 
-    const loadUltimateFallbackData = () => {
+    const ultimateFallback = () => {
         console.warn("Ultimate fallback: No valid data found. Starting with empty/default settings.");
-        setAllPlayers([]); // Fallback to empty player list
+        setAllPlayers([]);
         setSelectedFormation(DEFAULT_FORMATION);
         setCustomFormationName(t('defaultFormationName'));
+        setAllSeasonMatches([]);
         setLeagueTableData([]);
         setTeamStatsData([]);
         setPlayerStatsData([]);
-        // Keep soccerSeasonMatches localStorage as is, SeasonPage has its own fallback.
         setLanguage('es'); 
         setSettingsCardScale(0.7); 
-        localStorage.removeItem(LOCAL_STORAGE_APP_DATA_KEY); 
+        localStorage.removeItem(LOCAL_STORAGE_APP_DATA_KEY);
+        // Do not clear 'soccerSeasonMatches' here, as applyLoadedData might use it if season is missing
         setIsInitialized(true);
     };
     
@@ -188,7 +197,7 @@ const App = (): JSX.Element => {
             }
         } catch (fileError) {
             console.error("Error loading default data from local JSON file:", fileError);
-            loadUltimateFallbackData();
+            ultimateFallback();
         }
     };
 
@@ -197,9 +206,9 @@ const App = (): JSX.Element => {
         const storedData = localStorage.getItem(LOCAL_STORAGE_APP_DATA_KEY);
         if (storedData) {
             const loadedAppData = JSON.parse(storedData) as AppData;
-            if (loadedAppData && loadedAppData.tactician && loadedAppData.roster && loadedAppData.settings && loadedAppData.version) { // Added season check
+            if (loadedAppData && loadedAppData.tactician && loadedAppData.roster && loadedAppData.settings && loadedAppData.version) {
                  if (loadedAppData.version !== APP_VERSION) {
-                    console.warn(`LocalStorage data version ${loadedAppData.version} mismatches app version ${APP_VERSION}. Attempting to load anyway. Consider clearing localStorage or loading fresh backup if issues arise.`);
+                    console.warn(`LocalStorage data version ${loadedAppData.version} mismatches app version ${APP_VERSION}. Attempting to load anyway.`);
                  }
                 console.log("Found valid data in localStorage, applying...");
                 applyLoadedData(loadedAppData);
@@ -474,16 +483,6 @@ const App = (): JSX.Element => {
   };
   
   const getCurrentAppData = useCallback((): AppData => {
-    let seasonMatches: Match[] = [];
-    try {
-      const storedMatches = localStorage.getItem('soccerSeasonMatches');
-      if (storedMatches) {
-        seasonMatches = JSON.parse(storedMatches);
-      }
-    } catch (error) {
-      console.error("Error reading matches from localStorage for save:", error);
-    }
-
     return {
       tactician: {
         customSetupName: customFormationName,
@@ -496,7 +495,7 @@ const App = (): JSX.Element => {
       },
       roster: allPlayers,
       season: {
-        matches: seasonMatches,
+        matches: allSeasonMatches, // Use centralized matches state
         leagueTable: leagueTableData, 
         teamStats: teamStatsData,    
         playerStats: playerStatsData, 
@@ -509,7 +508,7 @@ const App = (): JSX.Element => {
     };
   }, [
     customFormationName, selectedFormation.name, playersOnPitch, captainId, penaltyTakerId, cornerTakerId, freeKickTakerId,
-    allPlayers, language, settingsCardScale, leagueTableData, teamStatsData, playerStatsData
+    allPlayers, allSeasonMatches, leagueTableData, teamStatsData, playerStatsData, language, settingsCardScale
   ]);
 
 
@@ -528,6 +527,9 @@ const App = (): JSX.Element => {
     const appData = getCurrentAppData();
     try {
         localStorage.setItem(LOCAL_STORAGE_APP_DATA_KEY, JSON.stringify(appData));
+        // Clear old individual keys if they exist, to avoid confusion
+        localStorage.removeItem('soccerSeasonMatches'); 
+        localStorage.removeItem('nextMatchNotes'); // If this was ever used
         alert(t('quickSaveSuccess'));
     } catch (error) {
         console.error("Error quick saving data to localStorage:", error);
@@ -553,7 +555,7 @@ const App = (): JSX.Element => {
         }
         const loadedAppData = JSON.parse(jsonString) as AppData;
 
-        if (!loadedAppData.tactician || !loadedAppData.roster || !loadedAppData.settings || !loadedAppData.version) { // Removed season check for backward compatibility if old files miss it
+        if (!loadedAppData.tactician || !loadedAppData.roster || !loadedAppData.settings || !loadedAppData.version) { 
           throw new Error(t('invalidDataStructureError'));
         }
         if (loadedAppData.version !== APP_VERSION) {
@@ -563,6 +565,9 @@ const App = (): JSX.Element => {
         applyLoadedData(loadedAppData); 
 
         localStorage.setItem(LOCAL_STORAGE_APP_DATA_KEY, JSON.stringify(loadedAppData));
+        // Clear old individual keys after successful full load
+        localStorage.removeItem('soccerSeasonMatches');
+        localStorage.removeItem('nextMatchNotes');
         
         alert(t('loadAllDataSuccess'));
 
@@ -584,6 +589,41 @@ const App = (): JSX.Element => {
     };
     reader.readAsText(file);
   };
+  
+  // Handlers for SeasonPage and NextMatchPage to update allSeasonMatches in App.tsx
+  const handleSaveMatchInApp = useCallback((matchToSave: Match) => {
+    setAllSeasonMatches(prevMatches => {
+      const existingMatchIndex = prevMatches.findIndex(m => m.id === matchToSave.id);
+      let updatedMatches;
+      if (existingMatchIndex > -1) {
+        updatedMatches = prevMatches.map(m => m.id === matchToSave.id ? matchToSave : m);
+      } else {
+        updatedMatches = [...prevMatches, matchToSave];
+      }
+      return updatedMatches.sort((a,b) => new Date(a.date+'T'+a.time).getTime() - new Date(b.date+'T'+b.time).getTime());
+    });
+  }, []);
+
+  const handleDeleteMatchInApp = useCallback((matchIdToDelete: string) => {
+    setAllSeasonMatches(prevMatches => prevMatches.filter(m => m.id !== matchIdToDelete));
+  }, []);
+
+  const handleUpdateMatchNotesInApp = useCallback((matchId: string, notes: string) => {
+    setAllSeasonMatches(prevMatches => 
+      prevMatches.map(m => 
+        m.id === matchId ? { ...m, matchNotes: notes } : m
+      )
+    );
+  }, []);
+
+  const nextMatchForPage = useMemo(() => {
+    if (allSeasonMatches.length === 0) return null;
+    const now = new Date();
+    const upcoming = allSeasonMatches
+      .filter(match => new Date(match.date + 'T' + (match.time || '00:00')) >= now)
+      .sort((a,b) => new Date(a.date+'T'+(a.time||'00:00')).getTime() - new Date(b.date+'T'+(b.time||'00:00')).getTime());
+    return upcoming.length > 0 ? upcoming[0] : null;
+  }, [allSeasonMatches]);
 
 
   const captainPlayer = allPlayers.find(p => p.id === captainId) || null;
@@ -808,10 +848,29 @@ const App = (): JSX.Element => {
         />}
       {currentView === 'season' && 
         <SeasonPage 
-          onNavigateBack={() => setCurrentView('tactician')}
+          matches={allSeasonMatches}
+          onSaveMatch={handleSaveMatchInApp}
+          onDeleteMatch={handleDeleteMatchInApp}
           leagueTableData={leagueTableData}
           teamStatsData={teamStatsData}
           playerStatsData={playerStatsData}
+          onNavigateBack={() => setCurrentView('tactician')}
+        />}
+      {currentView === 'nextMatch' && 
+        <NextMatchPage
+          nextMatch={nextMatchForPage}
+          onUpdateMatchNotes={handleUpdateMatchNotesInApp}
+          playersOnPitch={playersOnPitch}
+          selectedFormation={selectedFormation}
+          customFormationName={customFormationName}
+          captainPlayer={captainPlayer}
+          penaltyTakerPlayer={penaltyTakerPlayer}
+          cornerTakerPlayer={cornerTakerPlayer}
+          freeKickTakerPlayer={freeKickTakerPlayer}
+          onOpenDetailModal={handleOpenPlayerDetailModal}
+          cardScale={settingsCardScale * 0.9} 
+          getSlotRole={getSlotRole}
+          onNavigateBack={() => setCurrentView('tactician')}
         />}
     </div>
   );

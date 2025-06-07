@@ -1,3 +1,4 @@
+
 {
   "tactician": {
     "customSetupName": "Configuración de Mi Equipo",
@@ -244,14 +245,24 @@
         "score": {
           "us": 2,
           "them": 1
-        }
+        },
+        "matchNotes": "Their goalkeeper is weak on high balls. Test him with crosses."
       },
       {
         "id": "37482888-bf50-4df7-88cb-892276b83f2b",
         "date": "2025-06-07",
         "opponent": "CASI LEYENDAS",
         "time": "19:00",
-        "isHome": true
+        "isHome": true,
+        "matchNotes": "Ya hemos jugado contra ellos. No son muy rapidos pero tienen fuerza."
+      },
+      {
+        "id": "upcoming-match-001",
+        "date": "2025-06-14", 
+        "opponent": "The Hurricanes",
+        "time": "15:30",
+        "isHome": false,
+        "matchNotes": "Strong counter-attacking team. Maintain defensive shape."
       }
     ],
     "leagueTable": [

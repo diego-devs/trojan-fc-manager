@@ -6,65 +6,35 @@ import MatchCalendar from './season/MatchCalendar';
 import MatchModal from './season/MatchModal';
 import StatisticsTabs from './season/StatisticsTabs';
 
-// Helper to get initial matches (e.g., from localStorage or a default set)
-const getInitialMatches = (): Match[] => {
-  try {
-    const storedMatches = localStorage.getItem('soccerSeasonMatches');
-    if (storedMatches) {
-      return JSON.parse(storedMatches);
-    }
-  } catch (error) {
-    console.error("Error loading matches from localStorage:", error);
-  }
-  // Default/Demo Matches if nothing in localStorage
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  const nextWeek = new Date(today);
-  nextWeek.setDate(today.getDate() + 7);
-  const lastWeek = new Date(today);
-  lastWeek.setDate(today.getDate() - 7);
-
-  return [
-    { id: crypto.randomUUID(), date: tomorrow.toISOString().split('T')[0], opponent: 'Rival FC', time: '15:00', isHome: true },
-    { id: crypto.randomUUID(), date: nextWeek.toISOString().split('T')[0], opponent: 'Local Legends', time: '20:00', isHome: false },
-    { id: crypto.randomUUID(), date: lastWeek.toISOString().split('T')[0], opponent: 'Vintage XI', time: '14:00', isHome: true, score: {us: 2, them: 1}},
-    { id: crypto.randomUUID(), date: today.toISOString().split('T')[0], opponent: 'City Casuals', time: '18:30', isHome: true },
-  ];
-};
-
 interface SeasonPageProps {
-  onNavigateBack: () => void;
+  matches: Match[];
+  onSaveMatch: (match: Match) => void;
+  onDeleteMatch: (matchId: string) => void;
   leagueTableData: LeagueTableRow[];
   teamStatsData: TeamStatistic[];
   playerStatsData: PlayerStatistic[];
+  onNavigateBack: () => void;
 }
 
 const SeasonPage: React.FC<SeasonPageProps> = ({ 
-  onNavigateBack,
+  matches,
+  onSaveMatch,
+  onDeleteMatch,
   leagueTableData,
   teamStatsData,
-  playerStatsData 
+  playerStatsData,
+  onNavigateBack,
 }) => {
   const { t } = useTranslation();
-  const [matches, setMatches] = useState<Match[]>(getInitialMatches);
   const [currentDisplayDate, setCurrentDisplayDate] = useState(new Date());
   
   const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
   const [matchModalData, setMatchModalData] = useState<Partial<Match> | null>(null);
   const [matchModalMode, setMatchModalMode] = useState<'add' | 'edit'>('add');
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('soccerSeasonMatches', JSON.stringify(matches));
-      console.log('[SeasonPage] Matches saved to localStorage:', matches);
-    } catch (error) {
-      console.error("Error saving matches to localStorage:", error);
-    }
-  }, [matches]);
 
-  const handleAddMatchRequest = (date: string) => { // date is YYYY-MM-DD
-    setMatchModalData({ date }); 
+  const handleAddMatchRequest = (date: string) => { 
+    setMatchModalData({ date, matchNotes: '' }); // Initialize matchNotes for new match
     setMatchModalMode('add');
     setIsMatchModalOpen(true);
   };
@@ -75,29 +45,13 @@ const SeasonPage: React.FC<SeasonPageProps> = ({
     setIsMatchModalOpen(true);
   };
 
-  const handleDeleteMatchRequest = (matchIdToDelete: string) => {
-    console.log(`[SeasonPage] handleDeleteMatchRequest invoked for ID: ${matchIdToDelete}`);
-    setMatches(prevMatches => {
-      console.log(`[SeasonPage] Matches BEFORE delete attempt (ID: ${matchIdToDelete}):`, JSON.parse(JSON.stringify(prevMatches)));
-      const newMatches = prevMatches.filter(m => m.id !== matchIdToDelete);
-      console.log(`[SeasonPage] Matches AFTER delete attempt (ID: ${matchIdToDelete}):`, JSON.parse(JSON.stringify(newMatches)));
-      
-      if (newMatches.length === prevMatches.length) {
-        console.warn(`[SeasonPage] Filter did not remove any matches. ID ${matchIdToDelete} might not exist in the current list, or there's an issue with the filter logic or ID.`);
-      } else {
-        console.log(`[SeasonPage] Match with ID ${matchIdToDelete} successfully removed from state.`);
-      }
-      return newMatches;
-    });
+  const handleSaveMatchSubmit = (matchToSave: Match) => {
+    onSaveMatch(matchToSave); // Call prop from App.tsx
+    setIsMatchModalOpen(false);
   };
 
-  const handleSaveMatch = (matchToSave: Match) => {
-    if (matchModalMode === 'add') {
-      setMatches(prevMatches => [...prevMatches, matchToSave].sort((a,b) => new Date(a.date+'T'+a.time).getTime() - new Date(b.date+'T'+b.time).getTime()));
-    } else {
-      setMatches(prevMatches => prevMatches.map(m => m.id === matchToSave.id ? matchToSave : m).sort((a,b) => new Date(a.date+'T'+a.time).getTime() - new Date(b.date+'T'+b.time).getTime()));
-    }
-    setIsMatchModalOpen(false);
+  const handleDeleteMatchSubmit = (matchIdToDelete: string) => {
+    onDeleteMatch(matchIdToDelete); // Call prop from App.tsx
   };
 
   const handleSelectNextMatchCard = useCallback((match: Match) => {
@@ -123,7 +77,7 @@ const SeasonPage: React.FC<SeasonPageProps> = ({
         matches={matches}
         onAddMatchRequest={handleAddMatchRequest}
         onEditMatchRequest={handleEditMatchRequest}
-        onDeleteMatchRequest={handleDeleteMatchRequest}
+        onDeleteMatchRequest={handleDeleteMatchSubmit} // Use the new handler
         onSelectNextMatchCard={handleSelectNextMatchCard}
       />
 
@@ -137,7 +91,7 @@ const SeasonPage: React.FC<SeasonPageProps> = ({
         <MatchModal
           isOpen={isMatchModalOpen}
           onClose={() => setIsMatchModalOpen(false)}
-          onSave={handleSaveMatch}
+          onSave={handleSaveMatchSubmit} // Use the new handler
           matchData={matchModalData}
           mode={matchModalMode}
         />

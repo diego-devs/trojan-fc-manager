@@ -165,8 +165,10 @@ export const translations = {
   navTactician: { en: "Tactician", es: "Planificador" },
   navPlayers: { en: "Players", es: "Jugadores" },
   navSeason: { en: "Season", es: "Temporada" },
+  navNextMatch: { en: "Next Match", es: "Próximo Partido" }, // New
   playersPageTitle: { en: "Manage Players", es: "Administrar Jugadores" }, 
   seasonPageTitle: { en: "Season Overview", es: "Resumen de Temporada" },
+  nextMatchPageTitle: { en: "Next Match Details", es: "Detalles del Próximo Partido" }, // New
   backToTacticianButton: { en: "Back to Tactician", es: "Volver al Planificador" },
 
   // PlayersPageControlsPanel.tsx 
@@ -281,6 +283,18 @@ export const translations = {
   month_9: { en: "October", es: "Octubre" },
   month_10: { en: "November", es: "Noviembre" },
   month_11: { en: "December", es: "Diciembre" },
+
+  // Next Match Page
+  noUpcomingMatches: { en: "No upcoming matches scheduled.", es: "No hay próximos partidos programados." },
+  ourTacticalSetup: { en: "Our Tactical Setup", es: "Nuestra Configuración Táctica" },
+  ourStartingLineup: { en: "Our Starting Lineup", es: "Nuestra Alineación Titular" },
+  opponentSnapshot: { en: "Opponent Snapshot", es: "Resumen del Rival" },
+  opponentInfoPlaceholder: { en: "Opponent information and scouting details will appear here soon.", es: "La información del rival y los detalles de scouting aparecerán aquí pronto." },
+  matchNotesStrategy: { en: "Match Notes & Strategy", es: "Notas y Estrategia del Partido" },
+  saveNotesButton: { en: "Save Notes", es: "Guardar Notas" },
+  notesSavedSuccess: { en: "Notes saved!", es: "¡Notas guardadas!" },
+  positionInFormation: { en: "Position: {position}", es: "Posición: {position}"},
+  emptySlotInLineup: { en: "Empty Slot", es: "Espacio Vacío"},
 };
 
 export type TranslationKey = keyof typeof translations;

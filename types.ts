@@ -61,6 +61,7 @@ export interface Match {
     them: number;
   };
   notes?: string;
+  matchNotes?: string; // Added for Next Match page notes specific to this match
 }
 
 export interface LeagueTableRow {
